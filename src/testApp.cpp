@@ -2,8 +2,11 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){
+	camWidth = 640;
+	camHeight = 480;
+
 	cam.setVerbose(true);
-	cam.initGrabber(640,480);
+	cam.initGrabber(camWidth,camHeight);
 	ofSetFrameRate(30);
 }
 
@@ -16,7 +19,7 @@ void testApp::update(){
 
     if(newFrame) {
     	// create cv image from cam
-    	cvImage.setFromPixels(cam.getPixels(), 640, 480);
+    	cvImage.setFromPixels(cam.getPixels(), camWidth, camHeight);
 
     	// create intermediary cv image
     	// IplImage *tmp = cvCreateImage(cvGetSize(cvImage.getCvImage()), IPL_DEPTH_8U, 1);
@@ -41,28 +44,40 @@ void testApp::update(){
   		double qualityLevel = 0.01;
 
   		// minDistance – The minimum possible Euclidean distance between the returned corners
-		double minDistance = 20.0;
+		double minDistance = 10.0;
 
 		// blockSize – Size of the averaging block for computing derivative covariation
 		// matrix over each pixel neighborhood, see cornerEigenValsAndVecs()
 		int blockSize = 3;
 
 		// useHarrisDetector – Indicates, whether to use operator or cornerMinEigenVal()
-		bool useHarrisDetector = false;
+		bool useHarrisDetector = true;
 
 		// k – Free parameter of Harris detector
 		double k = 0.04;
 
-    	cv::goodFeaturesToTrack(img, corners, maxCorners, qualityLevel, minDistance);
+		// the coreners array is an array of cv::Point2f objects
+    	cv::goodFeaturesToTrack(img, corners, maxCorners, qualityLevel, minDistance, cv::Mat(), blockSize, useHarrisDetector, k);
 
     	cout << "Number of corners detected: " << corners.size() << endl;
+
+  //   	for( int i = 0; i < corners.size(); i++ ) {
+		// 	cout << "corner location: " << corners[i].x << ", " << corners[i].y << endl;
+		// }
     }
 
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
+	ofClear(0,0,0);
+	// ofTranslate(camWidth/2, camHeight/2);
 	cam.draw(0,0);
+
+	for( int i = 0; i < corners.size(); i++ ) {
+		ofCircle(corners[i].x, corners[i].y, 1);
+	}
+
 }
 
 //--------------------------------------------------------------

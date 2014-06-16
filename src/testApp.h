@@ -22,6 +22,8 @@ class testApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
+		int camWidth;
+		int camHeight;
 		ofVideoGrabber cam;
 		ofxCvGrayscaleImage	cvImage;
 		std::vector< cv::Point2f > corners;
