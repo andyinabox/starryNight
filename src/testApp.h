@@ -25,7 +25,8 @@ class testApp : public ofBaseApp{
 		int camWidth;
 		int camHeight;
 		ofVideoGrabber cam;
-		ofxCvGrayscaleImage	cvImage;
+		ofxCvColorImage cvColorImage;
+		ofxCvGrayscaleImage	cvGreyImage;
 		std::vector< cv::Point2f > corners;
 		
 };

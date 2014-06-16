@@ -2,36 +2,43 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){
+	ofSetFrameRate(15);
+
 	camWidth = 640;
 	camHeight = 480;
 
 	cam.setVerbose(true);
-	cam.initGrabber(camWidth,camHeight);
-	ofSetFrameRate(30);
+	cam.initGrabber(camWidth, camHeight);
+
+	cvColorImage.allocate(camWidth, camHeight);
+	cvGreyImage.allocate(camWidth, camHeight);
+
+	cout << "camWidth: " << camWidth << ", camHeight: " << camHeight << endl;
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
-	ofBackground(100,100,100);
+	ofBackground(0,0,0);
 
 	cam.update();
     bool newFrame = cam.isFrameNew();
 
     if(newFrame) {
     	// create cv image from cam
-    	cvImage.setFromPixels(cam.getPixels(), camWidth, camHeight);
+    	cvColorImage.setFromPixels(cam.getPixels(), camWidth, camHeight);
+    	cvGreyImage = cvColorImage;
 
     	// create intermediary cv image
     	// IplImage *tmp = cvCreateImage(cvGetSize(cvImage.getCvImage()), IPL_DEPTH_8U, 1);
     	
     	// I guess the goodFeaturesToTrack method wants type Mat, not IplImage
-    	cv::Mat img = cv::Mat(cvImage.getCvImage());
+    	cv::Mat img = cv::Mat(cvGreyImage.getCvImage(), true);
 
     	// these should all go in a HUD
 
 		// maxCorners – The maximum number of corners to return. If there are more corners
 		// than that will be found, the strongest of them will be returned
-    	int maxCorners = 10;
+    	int maxCorners = 50;
 
     	// qualityLevel – Characterizes the minimal accepted quality of image corners;
 		// the value of the parameter is multiplied by the by the best corner quality
@@ -61,9 +68,6 @@ void testApp::update(){
 
     	cout << "Number of corners detected: " << corners.size() << endl;
 
-  //   	for( int i = 0; i < corners.size(); i++ ) {
-		// 	cout << "corner location: " << corners[i].x << ", " << corners[i].y << endl;
-		// }
     }
 
 }
@@ -71,12 +75,20 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::draw(){
 	ofClear(0,0,0);
-	// ofTranslate(camWidth/2, camHeight/2);
+
+	// draw the input
 	cam.draw(0,0);
 
-	for( int i = 0; i < corners.size(); i++ ) {
-		ofCircle(corners[i].x, corners[i].y, 1);
-	}
+	// draw the points
+	ofPushMatrix();
+
+		ofTranslate(camWidth, 0);
+
+		for( int i = 0; i < corners.size(); i++ ) {
+			ofCircle(corners[i].x, corners[i].y, 1);
+		}
+
+	ofPopMatrix();
 
 }
 
