@@ -13,17 +13,16 @@ void testApp::setup(){
 	cvColorImage.allocate(camWidth, camHeight);
 	cvGreyImage.allocate(camWidth, camHeight);
 
-	cout << "camWidth: " << camWidth << ", camHeight: " << camHeight << endl;
+	gui.setup();
+	gui.add(maxCorners.setup("max corners", 20, 0, 100));
+
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
-	ofBackground(0,0,0);
-
 	cam.update();
-    bool newFrame = cam.isFrameNew();
 
-    if(newFrame) {
+    if(cam.isFrameNew()) {
     	// create cv image from cam
     	cvColorImage.setFromPixels(cam.getPixels(), camWidth, camHeight);
     	cvGreyImage = cvColorImage;
@@ -38,7 +37,7 @@ void testApp::update(){
 
 		// maxCorners – The maximum number of corners to return. If there are more corners
 		// than that will be found, the strongest of them will be returned
-    	int maxCorners = 50;
+    	// int maxCorners = 50;
 
     	// qualityLevel – Characterizes the minimal accepted quality of image corners;
 		// the value of the parameter is multiplied by the by the best corner quality
@@ -66,7 +65,7 @@ void testApp::update(){
 		// the coreners array is an array of cv::Point2f objects
     	cv::goodFeaturesToTrack(img, corners, maxCorners, qualityLevel, minDistance, cv::Mat(), blockSize, useHarrisDetector, k);
 
-    	cout << "Number of corners detected: " << corners.size() << endl;
+    	// cout << "Number of corners detected: " << corners.size() << endl;
 
     }
 
@@ -74,21 +73,43 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-	ofClear(0,0,0);
+	ofClear(20,20,20);
+
+	int smallVidWidth = 210;
+	int smallVidHeight = 143;
 
 	// draw the input
-	cam.draw(0,0);
+	cam.draw(0,0, smallVidWidth, smallVidHeight);
 
 	// draw the points
 	ofPushMatrix();
 
-		ofTranslate(camWidth, 0);
+		ofTranslate(smallVidWidth+10, 10);
 
+		ofSetColor(0,0,0);
+		ofFill();
+		ofRect(0,0,camWidth, camHeight);
+
+		ofSetColor(255,255,255);
+		ofNoFill();
+		ofRect(0,0,camWidth, camHeight);
+
+		ofSetColor(255,255,255);
+		ofFill();		
 		for( int i = 0; i < corners.size(); i++ ) {
 			ofCircle(corners[i].x, corners[i].y, 1);
 		}
 
 	ofPopMatrix();
+
+	// ofPushMatrix();
+
+	// 	ofTranslate(0, smallVidHeight);
+		gui.setPosition(0, smallVidHeight);
+		gui.draw();
+
+	// ofPopMatrix();
+
 
 }
 

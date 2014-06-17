@@ -4,6 +4,7 @@
 
 #include "ofxOpenCv.h"
 
+#include "ofxGui.h"
 
 class testApp : public ofBaseApp{
 
@@ -22,11 +23,18 @@ class testApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
+		// image grabbing
 		int camWidth;
 		int camHeight;
 		ofVideoGrabber cam;
+
+		// image manipulation
 		ofxCvColorImage cvColorImage;
 		ofxCvGrayscaleImage	cvGreyImage;
 		std::vector< cv::Point2f > corners;
+
+		// gui
+		ofxPanel gui;
+		ofxIntSlider maxCorners;
 		
 };
