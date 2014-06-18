@@ -15,6 +15,10 @@ void testApp::setup(){
 
 	gui.setup();
 	gui.add(maxCorners.setup("max corners", 20, 0, 100));
+	gui.add(minDistance.setup("min distance", 20.0, 0.0, 100.0));
+	gui.add(maxStarSize.setup("max star size", 1.5, 0.0, 10.0));
+	gui.add(minStarSize.setup("min star size", 0.5, 0.0, 10.0));
+
 
 }
 
@@ -50,7 +54,7 @@ void testApp::update(){
   		double qualityLevel = 0.01;
 
   		// minDistance – The minimum possible Euclidean distance between the returned corners
-		double minDistance = 10.0;
+		// double minDistance = 10.0;
 
 		// blockSize – Size of the averaging block for computing derivative covariation
 		// matrix over each pixel neighborhood, see cornerEigenValsAndVecs()
@@ -95,9 +99,13 @@ void testApp::draw(){
 		ofRect(0,0,camWidth, camHeight);
 
 		ofSetColor(255,255,255);
-		ofFill();		
-		for( int i = 0; i < corners.size(); i++ ) {
-			ofCircle(corners[i].x, corners[i].y, 1);
+		ofFill();
+
+		float starRadius;
+
+		for( int i = corners.size(); i > 0; i-- ) {
+			starRadius = (((maxStarSize-minStarSize)/corners.size())*i)+minStarSize;
+			ofCircle(corners[i].x, corners[i].y, starRadius);
 		}
 
 	ofPopMatrix();

@@ -36,5 +36,9 @@ class testApp : public ofBaseApp{
 		// gui
 		ofxPanel gui;
 		ofxIntSlider maxCorners;
+		ofxFloatSlider minDistance;
+		ofxFloatSlider maxStarSize;
+		ofxFloatSlider minStarSize;
+
 		
 };
