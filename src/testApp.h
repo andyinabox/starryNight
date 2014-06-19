@@ -39,6 +39,10 @@ class testApp : public ofBaseApp{
 		ofxFloatSlider minDistance;
 		ofxFloatSlider maxStarSize;
 		ofxFloatSlider minStarSize;
+		ofxFloatSlider qualityLevel;
+		ofxIntSlider blockSize;
+		ofxToggle useHarrisDetector;
+		ofxFloatSlider k;
 
 		
 };

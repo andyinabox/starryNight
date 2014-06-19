@@ -18,6 +18,10 @@ void testApp::setup(){
 	gui.add(minDistance.setup("min distance", 20.0, 0.0, 100.0));
 	gui.add(maxStarSize.setup("max star size", 1.5, 0.0, 10.0));
 	gui.add(minStarSize.setup("min star size", 0.5, 0.0, 10.0));
+	gui.add(qualityLevel.setup("quality level", 0.01, 0.0, 1.0));
+	gui.add(blockSize.setup("block size", 3, 0, 10));
+	gui.add(useHarrisDetector.setup("use harris detector", false));
+	gui.add(k.setup("k", 0.04, 0.0, 1));
 
 
 }
@@ -51,20 +55,20 @@ void testApp::update(){
 		// For example, if the best corner has the quality measure = 1500,
 		// and the qualityLevel=0.01 , then all the corners which quality measure is
 		// less than 15 will be rejected.
-  		double qualityLevel = 0.01;
+  		// double qualityLevel = 0.01;
 
   		// minDistance – The minimum possible Euclidean distance between the returned corners
 		// double minDistance = 10.0;
 
 		// blockSize – Size of the averaging block for computing derivative covariation
 		// matrix over each pixel neighborhood, see cornerEigenValsAndVecs()
-		int blockSize = 3;
+		// int blockSize = 3;
 
 		// useHarrisDetector – Indicates, whether to use operator or cornerMinEigenVal()
-		bool useHarrisDetector = true;
+		// bool useHarrisDetector = true;
 
 		// k – Free parameter of Harris detector
-		double k = 0.04;
+		// double k = 0.04;
 
 		// the coreners array is an array of cv::Point2f objects
     	cv::goodFeaturesToTrack(img, corners, maxCorners, qualityLevel, minDistance, cv::Mat(), blockSize, useHarrisDetector, k);
